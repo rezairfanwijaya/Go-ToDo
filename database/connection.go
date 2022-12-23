@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"gotodo/activity"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -23,6 +25,8 @@ func Connection(creds map[string]interface{}) (*gorm.DB, error) {
 		msgErr := fmt.Sprintf("ERR CONNECTION : %v", err.Error())
 		return db, errors.New(msgErr)
 	}
+
+	db.AutoMigrate(activity.Activity{})
 
 	return db, nil
 }
