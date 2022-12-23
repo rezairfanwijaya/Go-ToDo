@@ -3,7 +3,8 @@ package activity
 import "gorm.io/gorm"
 
 // interface
-type IRepository interface {
+type IActivityRepository interface {
+	Save(activity Activity) (Activity, error)
 }
 
 type repository struct {
@@ -11,6 +12,14 @@ type repository struct {
 }
 
 // new repo
-func NewRespository(db *gorm.DB) *repository {
+func NewActivityRespository(db *gorm.DB) *repository {
 	return &repository{db}
+}
+
+func (r *repository) Save(activity Activity) (Activity, error) {
+	if err := r.db.Create(&activity).Error; err != nil {
+		return activity, err
+	}
+
+	return activity, nil
 }
