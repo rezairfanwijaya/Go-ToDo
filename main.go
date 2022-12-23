@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gotodo/activity"
 	"gotodo/database"
 	"log"
 	"os"
@@ -21,9 +22,24 @@ func main() {
 		"dbName":   dbName,
 	}
 
-	_, err := database.Connection(credsDatabase)
+	db, err := database.Connection(credsDatabase)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+
+	repo := activity.NewActivityRespository(db)
+	serv := activity.NewActivityService(repo)
+
+	input := activity.ActivityCreateInput{
+		Title: "test",
+		Email: "test@gmail.com",
+	}
+
+	res, err := serv.CreateActivity(input)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	log.Println(res)
 
 }
