@@ -57,3 +57,17 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *activityHandler) GetAllActivity(c *gin.Context) {
+	// call service
+	activities := h.activityService.GetAllActivity()
+
+	response := utils.ResponseAPI(
+		"Success",
+		activities,
+		"Success",
+		false,
+	)
+
+	c.JSON(http.StatusOK, response)
+}
