@@ -32,5 +32,6 @@ func NewRoute(db *gorm.DB, r *gin.Engine) {
 	r.PATCH("/activity-groups/:id", activityHandler.UpdateByID)
 
 	r.GET("/todo-items/:id", todoHandler.GetTodoByID)
+	r.GET("/todo-items", todoHandler.GetAllTodo)
 	r.POST("/todo-items", todoHandler.CreateTodo)
 }
