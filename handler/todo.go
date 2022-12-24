@@ -175,3 +175,44 @@ func (h *todoHandler) GetAllTodo(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *todoHandler) DeleteById(c *gin.Context) {
+	// get id from param
+	idParam := c.Param("id")
+
+	// convert to int
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			"id must be int",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// call service
+	if err := h.serviceTodo.DeleteByID(id); err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			err.Error(),
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := utils.ResponseAPI(
+		"Success",
+		todo.TodoAfterDelete{},
+		"Success",
+		false,
+	)
+
+	c.JSON(http.StatusOK, response)
+}
