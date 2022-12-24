@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
+
+	"gotodo/utils"
 )
 
 // interface
@@ -11,6 +13,7 @@ type IActivityService interface {
 	CreateActivity(input ActivityCreateInput) (Activity, error)
 	GetAllActivity() []Activity
 	GetActivityByID(id int) (Activity, error)
+	DeleteByID(id int) error
 }
 
 type activityService struct {
@@ -45,9 +48,8 @@ func (s *activityService) GetAllActivity() []Activity {
 
 func (s *activityService) GetActivityByID(id int) (Activity, error) {
 	// validation
-	if id <= 0 {
-		errMsg := fmt.Sprintf("id must grather then 0")
-		return Activity{}, errors.New(errMsg)
+	if err := utils.ValidateID(id); err != nil {
+		return Activity{}, err
 	}
 
 	// call service
@@ -63,4 +65,24 @@ func (s *activityService) GetActivityByID(id int) (Activity, error) {
 	}
 
 	return activity, nil
+}
+
+func (s *activityService) DeleteByID(id int) error {
+	if err := utils.ValidateID(id); err != nil {
+		return err
+	}
+
+	// find activity by id
+	activity, err := s.activityRepo.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	if activity.ID == 0 {
+		errMsg := fmt.Sprintf("Activity with ID %v Not Found", id)
+		return errors.New(errMsg)
+	}
+
+	// call repo and return
+	return s.activityRepo.DeleteByID(id)
 }
