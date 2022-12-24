@@ -17,5 +17,6 @@ func NewRoute(db *gorm.DB, r *gin.Engine) {
 	activityHandler := handler.NewActivityHandler(activityService)
 
 	// endpoints
+	r.GET("/activity-groups", activityHandler.GetAllActivity)
 	r.POST("/activity-groups", activityHandler.CreateActivity)
 }
