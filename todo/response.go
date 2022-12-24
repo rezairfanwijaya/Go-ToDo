@@ -23,3 +23,13 @@ func FormatterTodo(todo Todo) todoFormatter {
 		UpdatedAt:  todo.CreatredAt,
 	}
 }
+
+func FormatterTodos(todos []Todo) []todoFormatter {
+	var res []todoFormatter
+
+	for _, todo := range todos {
+		res = append(res, FormatterTodo(todo))
+	}
+
+	return res
+}
