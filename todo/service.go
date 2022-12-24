@@ -1,6 +1,8 @@
 package todo
 
 import (
+	"errors"
+	"fmt"
 	"gotodo/activity"
 	"gotodo/utils"
 	"time"
@@ -9,6 +11,7 @@ import (
 // intrerface
 type ITodoService interface {
 	CreateTodo(input TodoCreateInput) (Todo, error)
+	GetTodoById(id int) (Todo, error)
 }
 
 type todoService struct {
@@ -48,4 +51,23 @@ func (s *todoService) CreateTodo(input TodoCreateInput) (Todo, error) {
 	}
 
 	return todoSaved, nil
+}
+
+func (s *todoService) GetTodoById(id int) (Todo, error) {
+	if err := utils.ValidateID(id); err != nil {
+		return Todo{}, err
+	}
+
+	// call repo
+	todo, err := s.repoTodo.FindByID(id)
+	if err != nil {
+		return todo, err
+	}
+
+	if todo.ID == 0 {
+		errMsg := fmt.Sprintf("Todo with ID %v Not Found", id)
+		return todo, errors.New(errMsg)
+	}
+
+	return todo, nil
 }
