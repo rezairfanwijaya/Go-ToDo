@@ -14,6 +14,7 @@ type IActivityService interface {
 	GetAllActivity() []Activity
 	GetActivityByID(id int) (Activity, error)
 	DeleteByID(id int) error
+	UpdateByID(input ActivityUpdateInput, id int) (Activity, error)
 }
 
 type activityService struct {
@@ -85,4 +86,32 @@ func (s *activityService) DeleteByID(id int) error {
 
 	// call repo and return
 	return s.activityRepo.DeleteByID(id)
+}
+
+func (s *activityService) UpdateByID(input ActivityUpdateInput, id int) (Activity, error) {
+	if err := utils.ValidateID(id); err != nil {
+		return Activity{}, err
+	}
+
+	// find activity by id
+	activity, err := s.activityRepo.FindByID(id)
+	if err != nil {
+		return activity, err
+	}
+
+	if activity.ID == 0 {
+		errMsg := fmt.Sprintf("Activity with ID %v Not Found", id)
+		return activity, errors.New(errMsg)
+	}
+
+	// update
+	activity.Title = input.Title
+
+	// call repo
+	activityUpdated, err := s.activityRepo.UpdateById(activity)
+	if err != nil {
+		return activityUpdated, err
+	}
+
+	return activityUpdated, nil
 }
