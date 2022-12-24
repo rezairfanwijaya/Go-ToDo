@@ -103,5 +103,75 @@ func (h *todoHandler) GetTodoByID(c *gin.Context) {
 	)
 
 	c.JSON(http.StatusOK, response)
+}
 
+func (h *todoHandler) GetAllTodo(c *gin.Context) {
+	idActivityQuery := c.Query("activity_group_id")
+
+	if idActivityQuery == "" {
+		// call service
+		todos, err := h.serviceTodo.GetAllTodo(0, false)
+		if err != nil {
+			response := utils.ResponseAPI(
+				http.StatusText(http.StatusBadRequest),
+				nil,
+				err.Error(),
+				true,
+			)
+
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+
+		todoFormatted := todo.FormatterTodos(todos)
+
+		response := utils.ResponseAPI(
+			"Success",
+			todoFormatted,
+			"Success",
+			false,
+		)
+
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	// convert to int
+	id, err := strconv.Atoi(idActivityQuery)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			"id must be int",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// call service
+	todos, err := h.serviceTodo.GetAllTodo(id, true)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			err.Error(),
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	todoFormatted := todo.FormatterTodos(todos)
+
+	response := utils.ResponseAPI(
+		"Success",
+		todoFormatted,
+		"Success",
+		false,
+	)
+
+	c.JSON(http.StatusOK, response)
 }
