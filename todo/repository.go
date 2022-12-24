@@ -8,6 +8,7 @@ type ITodoRepository interface {
 	FindByID(id int) (Todo, error)
 	FindAll() []Todo
 	FindByActivityID(id int) ([]Todo, error)
+	DeleteByID(id int) error
 }
 
 type todoRepository struct {
@@ -29,6 +30,7 @@ func (r *todoRepository) Save(todo Todo) (Todo, error) {
 
 func (r *todoRepository) FindByID(id int) (Todo, error) {
 	var todo Todo
+	
 	if err := r.db.Where("id = ?", id).Find(&todo).Error; err != nil {
 		return todo, err
 	}
@@ -52,4 +54,14 @@ func (r *todoRepository) FindByActivityID(id int) ([]Todo, error) {
 	}
 
 	return todos, nil
+}
+
+func (r *todoRepository) DeleteByID(id int) error {
+	var todo Todo
+
+	if err := r.db.Where("id = ?", id).Delete(&todo).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

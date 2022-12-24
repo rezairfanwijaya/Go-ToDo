@@ -13,6 +13,7 @@ type ITodoService interface {
 	CreateTodo(input TodoCreateInput) (Todo, error)
 	GetTodoById(id int) (Todo, error)
 	GetAllTodo(id int, isHaveQuery bool) ([]Todo, error)
+	DeleteByID(id int) error
 }
 
 type todoService struct {
@@ -95,4 +96,24 @@ func (s *todoService) GetAllTodo(id int, isHaveQuery bool) ([]Todo, error) {
 
 	// call repo
 	return s.repoTodo.FindAll(), nil
+}
+
+func (s *todoService) DeleteByID(id int) error {
+	if err := utils.ValidateID(id); err != nil {
+		return err
+	}
+
+	// find by id
+	todo, err := s.repoTodo.FindByID(id)
+	if err != nil {
+		return err
+	}
+
+	if todo.ID == 0 {
+		errMsg := fmt.Sprintf("Todo with ID %v Not Found", id)
+		return errors.New(errMsg)
+	}
+
+	// call repo
+	return s.repoTodo.DeleteByID(id)
 }

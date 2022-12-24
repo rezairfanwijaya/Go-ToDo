@@ -12,6 +12,8 @@ type todoFormatter struct {
 	UpdatedAt  time.Time `json:"createdAt"`
 }
 
+type TodoAfterDelete struct{}
+
 func FormatterTodo(todo Todo) todoFormatter {
 	return todoFormatter{
 		ID:         todo.ID,
