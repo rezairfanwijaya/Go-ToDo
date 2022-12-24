@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/go-playground/validator/v10"
@@ -41,4 +42,13 @@ func ErrorBinding(err error) []string {
 	}
 
 	return myerr
+}
+
+func ValidateID(id int) error {
+	if id <= 0 {
+		errMsg := fmt.Sprintf("id must grather then 0")
+		return errors.New(errMsg)
+	}
+
+	return nil
 }
