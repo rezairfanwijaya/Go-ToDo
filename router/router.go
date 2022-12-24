@@ -20,4 +20,5 @@ func NewRoute(db *gorm.DB, r *gin.Engine) {
 	r.GET("/activity-groups", activityHandler.GetAllActivity)
 	r.GET("/activity-groups/:id", activityHandler.GetActivityByID)
 	r.POST("/activity-groups", activityHandler.CreateActivity)
+	r.DELETE("/activity-groups/:id", activityHandler.DeleteByID)
 }
