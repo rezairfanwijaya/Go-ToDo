@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"gotodo/activity"
+	"gotodo/todo"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -26,7 +27,7 @@ func Connection(creds map[string]interface{}) (*gorm.DB, error) {
 		return db, errors.New(msgErr)
 	}
 
-	db.AutoMigrate(activity.Activity{})
+	db.AutoMigrate(activity.Activity{}, todo.Todo{})
 
 	return db, nil
 }
