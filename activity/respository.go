@@ -48,9 +48,11 @@ func (r *repository) FindByID(id int) (Activity, error) {
 
 func (r *repository) DeleteByID(id int) error {
 	var activity Activity
+
 	if err := r.db.Where("id = ?", id).Delete(&activity).Error; err != nil {
 		return err
 	}
+
 	return nil
 }
 
