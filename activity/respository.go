@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 // interface
 type IActivityRepository interface {
 	Save(activity Activity) (Activity, error)
+	FindAll() []Activity
 }
 
 type repository struct {
@@ -22,4 +23,12 @@ func (r *repository) Save(activity Activity) (Activity, error) {
 	}
 
 	return activity, nil
+}
+
+func (r *repository) FindAll() []Activity {
+	var activities []Activity
+
+	r.db.Find(&activities)
+
+	return activities
 }

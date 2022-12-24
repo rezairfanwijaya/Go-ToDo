@@ -5,6 +5,7 @@ import "time"
 // interface
 type IActivityService interface {
 	CreateActivity(input ActivityCreateInput) (Activity, error)
+	GetAllActivity() []Activity
 }
 
 type activityService struct {
@@ -31,4 +32,8 @@ func (s *activityService) CreateActivity(input ActivityCreateInput) (Activity, e
 	}
 
 	return newActivity, nil
+}
+
+func (s *activityService) GetAllActivity() []Activity {
+	return s.activityRepo.FindAll()
 }
