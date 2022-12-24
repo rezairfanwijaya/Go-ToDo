@@ -155,3 +155,62 @@ func (h *activityHandler) DeleteByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+func (h *activityHandler) UpdateByID(c *gin.Context) {
+	// get id from param
+	idParam := c.Param("id")
+
+	// convert to int
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			"id must be int",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// get body input
+	var input activity.ActivityUpdateInput
+
+	// bind
+	if err := c.BindJSON(&input); err != nil {
+		myErr := utils.ErrorBinding(err)
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			myErr,
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// call service
+	activityUpdated, err := h.activityService.UpdateByID(input, id)
+	if err != nil {
+		response := utils.ResponseAPI(
+			"Not Found",
+			nil,
+			err.Error(),
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := utils.ResponseAPI(
+		"Success",
+		activityUpdated,
+		"Success",
+		false,
+	)
+
+	c.JSON(http.StatusOK, response)
+}
