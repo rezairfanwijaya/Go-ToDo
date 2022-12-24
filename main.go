@@ -1,18 +1,21 @@
 package main
 
 import (
-	"gotodo/activity"
+	"fmt"
 	"gotodo/database"
+	"gotodo/router"
 	"log"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	username := os.Getenv("username")
-	password := os.Getenv("password")
-	host := os.Getenv("host")
-	port := os.Getenv("port")
-	dbName := os.Getenv("db")
+	username := os.Getenv("MYSQL_USER")
+	password := os.Getenv("MYSQL_PASSWORD")
+	host := os.Getenv("MYSQL_HOST")
+	port := os.Getenv("MYSQL_PORT")
+	dbName := os.Getenv("MYSQL_DBNAME")
 
 	credsDatabase := map[string]interface{}{
 		"username": username,
@@ -27,19 +30,15 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	repo := activity.NewActivityRespository(db)
-	serv := activity.NewActivityService(repo)
+	// server
+	r := gin.Default()
 
-	input := activity.ActivityCreateInput{
-		Title: "test",
-		Email: "test@gmail.com",
+	// router
+	router.NewRoute(db, r)
+
+	// start server
+	address := fmt.Sprintf(":%v", 3030)
+	if err := r.Run(address); err != nil {
+		log.Fatal(err)
 	}
-
-	res, err := serv.CreateActivity(input)
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
-	log.Println(res)
-
 }
