@@ -6,6 +6,8 @@ import "gorm.io/gorm"
 type ITodoRepository interface {
 	Save(todo Todo) (Todo, error)
 	FindByID(id int) (Todo, error)
+	FindAll() []Todo
+	FindByActivityID(id int) ([]Todo, error)
 }
 
 type todoRepository struct {
@@ -32,4 +34,22 @@ func (r *todoRepository) FindByID(id int) (Todo, error) {
 	}
 
 	return todo, nil
+}
+
+func (r *todoRepository) FindAll() []Todo {
+	var todos []Todo
+
+	r.db.Find(&todos)
+
+	return todos
+}
+
+func (r *todoRepository) FindByActivityID(id int) ([]Todo, error) {
+	var todos []Todo
+
+	if err := r.db.Where("activity_id = ?", id).Find(&todos).Error; err != nil {
+		return todos, err
+	}
+
+	return todos, nil
 }
