@@ -14,6 +14,7 @@ type ITodoService interface {
 	GetTodoById(id int) (Todo, error)
 	GetAllTodo(id int, isHaveQuery bool) ([]Todo, error)
 	DeleteByID(id int) error
+	UpdateByID(input TodoUpdateInput, id int) (Todo, error)
 }
 
 type todoService struct {
@@ -116,4 +117,35 @@ func (s *todoService) DeleteByID(id int) error {
 
 	// call repo
 	return s.repoTodo.DeleteByID(id)
+}
+
+func (s *todoService) UpdateByID(input TodoUpdateInput, id int) (Todo, error) {
+	if err := utils.ValidateID(id); err != nil {
+		return Todo{}, err
+	}
+
+	// find by id
+	todo, err := s.repoTodo.FindByID(id)
+	if err != nil {
+		return todo, err
+	}
+
+	if todo.ID == 0 {
+		errMsg := fmt.Sprintf("Todo with ID %v Not Found", id)
+		return todo, errors.New(errMsg)
+	}
+
+	// update
+	todo.Title = input.Title
+	todo.Priority = input.Priority
+	todo.IsActive = input.IsActive
+	todo.UpdatedAt = time.Now()
+
+	// call repo
+	todoUpdated, err := s.repoTodo.UpdateByID(todo)
+	if err != nil {
+		return todoUpdated, err
+	}
+
+	return todoUpdated, nil
 }
