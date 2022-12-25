@@ -9,6 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	STATUS_BAD_REQUEST = "Bad Request"
+	STATUS_NOT_FOUND   = "Not Found"
+)
+
 type activityHandler struct {
 	activityService activity.IActivityService
 }
@@ -25,7 +30,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	if err := c.BindJSON(&input); err != nil {
 		myErr := utils.ErrorBinding(err)
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_BAD_REQUEST,
 			nil,
 			myErr,
 			true,
@@ -39,7 +44,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 	newActivity, err := h.activityService.CreateActivity(input)
 	if err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_BAD_REQUEST,
 			nil,
 			err.Error(),
 			true,
@@ -95,13 +100,13 @@ func (h *activityHandler) GetActivityByID(c *gin.Context) {
 	activity, err := h.activityService.GetActivityByID(id)
 	if err != nil {
 		response := utils.ResponseAPI(
-			"Not Found",
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
@@ -164,7 +169,7 @@ func (h *activityHandler) UpdateByID(c *gin.Context) {
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_BAD_REQUEST,
 			nil,
 			"id must be int",
 			true,
@@ -181,7 +186,7 @@ func (h *activityHandler) UpdateByID(c *gin.Context) {
 	if err := c.BindJSON(&input); err != nil {
 		myErr := utils.ErrorBinding(err)
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_BAD_REQUEST,
 			nil,
 			myErr,
 			true,
@@ -195,13 +200,13 @@ func (h *activityHandler) UpdateByID(c *gin.Context) {
 	activityUpdated, err := h.activityService.UpdateByID(input, id)
 	if err != nil {
 		response := utils.ResponseAPI(
-			"Not Found",
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
