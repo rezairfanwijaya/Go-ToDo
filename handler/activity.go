@@ -40,6 +40,18 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 		return
 	}
 
+	if input.Title == "" {
+		response := utils.ResponseAPI(
+			STATUS_BAD_REQUEST,
+			nil,
+			"title cannot be null",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	// call service
 	newActivity, err := h.activityService.CreateActivity(input)
 	if err != nil {
