@@ -87,12 +87,7 @@ func (s *todoService) GetAllTodo(id int, isHaveQuery bool) ([]Todo, error) {
 			return todos, err
 		}
 
-		if len(todos) == 0 {
-			errMsg := fmt.Sprintf("Activity Group with ID %v Not Found", id)
-			return todos, errors.New(errMsg)
-		}
-
-		return todos, nil
+		return []Todo{}, nil
 	}
 
 	// call repo

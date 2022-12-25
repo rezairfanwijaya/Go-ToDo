@@ -153,13 +153,13 @@ func (h *activityHandler) DeleteByID(c *gin.Context) {
 	err = h.activityService.DeleteByID(id)
 	if err != nil {
 		response := utils.ResponseAPI(
-			"Not Found",
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 

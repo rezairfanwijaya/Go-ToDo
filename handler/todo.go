@@ -35,11 +35,35 @@ func (h *todoHandler) CreateTodo(c *gin.Context) {
 		return
 	}
 
+	if input.Title == "" {
+		response := utils.ResponseAPI(
+			STATUS_BAD_REQUEST,
+			nil,
+			"title cannot be null",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	if input.ActivityID <= 0 {
+		response := utils.ResponseAPI(
+			STATUS_BAD_REQUEST,
+			nil,
+			"activity_group_id cannot be null",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
 	// call service
 	newTodo, err := h.serviceTodo.CreateTodo(input)
 	if err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_BAD_REQUEST,
 			nil,
 			err.Error(),
 			true,
@@ -58,7 +82,7 @@ func (h *todoHandler) CreateTodo(c *gin.Context) {
 		false,
 	)
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusCreated, response)
 }
 
 func (h *todoHandler) GetTodoByID(c *gin.Context) {
@@ -83,13 +107,13 @@ func (h *todoHandler) GetTodoByID(c *gin.Context) {
 	todoByID, err := h.serviceTodo.GetTodoById(id)
 	if err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
@@ -164,11 +188,17 @@ func (h *todoHandler) GetAllTodo(c *gin.Context) {
 		return
 	}
 
+	var resp interface{}
 	todoFormatted := todo.FormatterTodos(todos)
+	resp = todoFormatted
+
+	if len(todoFormatted) == 0 {
+		resp = []todo.Todo{}
+	}
 
 	response := utils.ResponseAPI(
 		"Success",
-		todoFormatted,
+		resp,
 		"Success",
 		false,
 	)
@@ -197,13 +227,13 @@ func (h *todoHandler) DeleteTodoById(c *gin.Context) {
 	// call service
 	if err := h.serviceTodo.DeleteByID(id); err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
@@ -255,13 +285,13 @@ func (h *todoHandler) UpdateTodoByID(c *gin.Context) {
 	todoUpdated, err := h.serviceTodo.UpdateByID(input, id)
 	if err != nil {
 		response := utils.ResponseAPI(
-			http.StatusText(http.StatusBadRequest),
+			STATUS_NOT_FOUND,
 			nil,
 			err.Error(),
 			true,
 		)
 
-		c.JSON(http.StatusBadRequest, response)
+		c.JSON(http.StatusNotFound, response)
 		return
 	}
 
