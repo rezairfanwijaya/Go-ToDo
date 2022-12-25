@@ -135,10 +135,10 @@ Simple todolist application using golang. There are two main domains, namely `To
 }
 ```
 
-#### De;ete Activity By ID
+#### Delete Activity By ID
 
 ```http
-  DE:ETE https://localhost:3030/activity-groups/1
+  DELETE https://localhost:3030/activity-groups/1
 ```
 
 | Param | Type     | Description                |
@@ -161,4 +161,50 @@ Simple todolist application using golang. There are two main domains, namely `To
     "message": "Activity with ID 1 Not Found"
 }
 ```
+#### Update Activity By ID
+
+```http
+  PATCH https://localhost:3030/activity-groups/1
+```
+
+| Param | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id` | `int` | **Required** ID Activity |
+
+| Body | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `title` | `int` | **Required** |
+
+##### Response Success
+```bash
+{
+    "status": "Success",
+    "message": "Success",
+    "data": {
+        "id": 1,
+        "title": "update",
+        "email": "test@gmail.com",
+        "updatedAt": "2022-12-24T21:56:42.499+07:00",
+        "createdAt": "2022-12-24T22:20:43.729+07:00"
+    }
+}
+```
+
+##### Response Failed ID
+```bash
+{
+    "status": "Not Found",
+    "message": "Activity with ID 1 Not Found"
+}
+```
+##### Response Failed Body
+```bash
+{
+    "status": "Bad Request",
+    "message": [
+        "error on filed: Title, condition: required"
+    ]
+}
+```
+
 
