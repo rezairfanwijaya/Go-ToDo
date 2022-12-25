@@ -27,7 +27,7 @@ func Connection(creds map[string]interface{}) (*gorm.DB, error) {
 		return db, errors.New(msgErr)
 	}
 
-	db.AutoMigrate(activity.Activity{}, todo.Todo{})
+	db.AutoMigrate(activity.ActivityGroup{}, todo.Todo{})
 
 	return db, nil
 }

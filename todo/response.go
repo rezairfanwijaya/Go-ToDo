@@ -17,7 +17,7 @@ type TodoAfterDelete struct{}
 func FormatterTodo(todo Todo) todoFormatter {
 	return todoFormatter{
 		ID:         todo.ID,
-		ActivityID: todo.ActivityID,
+		ActivityID: todo.ActivityGroupID,
 		Title:      todo.Title,
 		IsActive:   todo.IsActive,
 		Priority:   todo.Priority,
