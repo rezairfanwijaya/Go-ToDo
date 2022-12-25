@@ -31,5 +31,8 @@ Simple todolist application using golang. There are two main domains, namely `To
   go run main.go
 ```
 
+## Run With Docker
+Please pull image from [registry](https://hub.docker.com/r/rezairfanwijaya/go-todo)
+
 ## API Reference
 API documentation can view [here](https://documenter.getpostman.com/view/11940636/2s8Z6vZEic)
