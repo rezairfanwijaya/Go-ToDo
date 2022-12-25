@@ -56,7 +56,7 @@ func (h *activityHandler) CreateActivity(c *gin.Context) {
 		false,
 	)
 
-	c.JSON(http.StatusOK, response)
+	c.JSON(http.StatusCreated, response)
 }
 
 func (h *activityHandler) GetAllActivity(c *gin.Context) {
