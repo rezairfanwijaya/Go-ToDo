@@ -33,6 +33,7 @@ func NewRoute(db *gorm.DB, r *gin.Engine) {
 
 	r.GET("/todo-items/:id", todoHandler.GetTodoByID)
 	r.GET("/todo-items", todoHandler.GetAllTodo)
-	r.DELETE("/todo-items/:id", todoHandler.DeleteById)
+	r.DELETE("/todo-items/:id", todoHandler.DeleteTodoById)
 	r.POST("/todo-items", todoHandler.CreateTodo)
+	r.PATCH("/todo-items/:id", todoHandler.UpdateTodoByID)
 }
