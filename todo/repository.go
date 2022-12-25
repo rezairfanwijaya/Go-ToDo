@@ -50,7 +50,7 @@ func (r *todoRepository) FindAll() []Todo {
 func (r *todoRepository) FindByActivityID(id int) ([]Todo, error) {
 	var todos []Todo
 
-	if err := r.db.Where("activity_id = ?", id).Find(&todos).Error; err != nil {
+	if err := r.db.Where("activity_group_id = ?", id).Find(&todos).Error; err != nil {
 		return todos, err
 	}
 
