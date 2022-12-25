@@ -106,6 +106,7 @@ func (s *activityService) UpdateByID(input ActivityUpdateInput, id int) (Activit
 
 	// update
 	activity.Title = input.Title
+	activity.UpdatedAt = time.Now()
 
 	// call repo
 	activityUpdated, err := s.activityRepo.UpdateById(activity)
