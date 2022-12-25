@@ -22,7 +22,7 @@ func FormatterTodo(todo Todo) todoFormatter {
 		IsActive:   todo.IsActive,
 		Priority:   todo.Priority,
 		CreatredAt: todo.CreatredAt,
-		UpdatedAt:  todo.CreatredAt,
+		UpdatedAt:  todo.UpdatedAt,
 	}
 }
 
