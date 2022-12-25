@@ -48,6 +48,14 @@ Simple todolist application using golang. There are two main domains, namely `To
 | `title` | `string` | **Required** |
 | `email` | `string` | **Required** |
 
+##### Body Request
+```bash
+{
+    "title" : "test",
+    "email" : "test@gmail.com"
+}
+```
+
 ##### Response Success
 ```bash
 {
@@ -174,6 +182,13 @@ Simple todolist application using golang. There are two main domains, namely `To
 | Body | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `title` | `int` | **Required** |
+
+##### Body Request
+```bash
+{
+    "title" : "update"
+}
+```
 
 ##### Response Success
 ```bash
