@@ -2,7 +2,7 @@ package activity
 
 import "time"
 
-type ActivityGroup struct {
+type Activity struct {
 	ID         int       `json:"id,omitempty" gorm:"primaryKey"`
 	Title      string    `json:"title,omitempty"`
 	Email      string    `json:"email,omitempty"`

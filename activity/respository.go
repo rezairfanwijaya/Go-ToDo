@@ -4,11 +4,11 @@ import "gorm.io/gorm"
 
 // interface
 type IActivityRepository interface {
-	Save(activity ActivityGroup) (ActivityGroup, error)
-	FindAll() []ActivityGroup
-	FindByID(id int) (ActivityGroup, error)
+	Save(activity Activity) (Activity, error)
+	FindAll() []Activity
+	FindByID(id int) (Activity, error)
 	DeleteByID(id int) error
-	UpdateById(activity ActivityGroup) (ActivityGroup, error)
+	UpdateById(activity Activity) (Activity, error)
 }
 
 type repository struct {
@@ -20,7 +20,7 @@ func NewActivityRespository(db *gorm.DB) *repository {
 	return &repository{db}
 }
 
-func (r *repository) Save(activity ActivityGroup) (ActivityGroup, error) {
+func (r *repository) Save(activity Activity) (Activity, error) {
 	if err := r.db.Create(&activity).Error; err != nil {
 		return activity, err
 	}
@@ -28,16 +28,16 @@ func (r *repository) Save(activity ActivityGroup) (ActivityGroup, error) {
 	return activity, nil
 }
 
-func (r *repository) FindAll() []ActivityGroup {
-	var activities []ActivityGroup
+func (r *repository) FindAll() []Activity {
+	var activities []Activity
 
 	r.db.Find(&activities)
 
 	return activities
 }
 
-func (r *repository) FindByID(id int) (ActivityGroup, error) {
-	var activity ActivityGroup
+func (r *repository) FindByID(id int) (Activity, error) {
+	var activity Activity
 
 	if err := r.db.Where("id = ?", id).Find(&activity).Error; err != nil {
 		return activity, err
@@ -47,7 +47,7 @@ func (r *repository) FindByID(id int) (ActivityGroup, error) {
 }
 
 func (r *repository) DeleteByID(id int) error {
-	var activity ActivityGroup
+	var activity Activity
 
 	if err := r.db.Where("id = ?", id).Delete(&activity).Error; err != nil {
 		return err
@@ -56,7 +56,7 @@ func (r *repository) DeleteByID(id int) error {
 	return nil
 }
 
-func (r *repository) UpdateById(activity ActivityGroup) (ActivityGroup, error) {
+func (r *repository) UpdateById(activity Activity) (Activity, error) {
 	if err := r.db.Save(&activity).Error; err != nil {
 		return activity, err
 	}

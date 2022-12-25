@@ -41,7 +41,7 @@ func (s *todoService) CreateTodo(input TodoCreateInput) (Todo, error) {
 	// binding
 	var todo Todo
 	todo.Title = input.Title
-	todo.ActivityGroupID = activity.ID
+	todo.ActivityID = activity.ID
 	todo.IsActive = input.IsActive
 	todo.Priority = "very-high"
 	todo.CreatredAt = time.Now()

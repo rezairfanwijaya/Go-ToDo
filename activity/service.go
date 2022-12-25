@@ -10,11 +10,11 @@ import (
 
 // interface
 type IActivityService interface {
-	CreateActivity(input ActivityCreateInput) (ActivityGroup, error)
-	GetAllActivity() []ActivityGroup
-	GetActivityByID(id int) (ActivityGroup, error)
+	CreateActivity(input ActivityCreateInput) (Activity, error)
+	GetAllActivity() []Activity
+	GetActivityByID(id int) (Activity, error)
 	DeleteByID(id int) error
-	UpdateByID(input ActivityUpdateInput, id int) (ActivityGroup, error)
+	UpdateByID(input ActivityUpdateInput, id int) (Activity, error)
 }
 
 type activityService struct {
@@ -26,9 +26,9 @@ func NewActivityService(activityRepo IActivityRepository) *activityService {
 	return &activityService{activityRepo}
 }
 
-func (s *activityService) CreateActivity(input ActivityCreateInput) (ActivityGroup, error) {
+func (s *activityService) CreateActivity(input ActivityCreateInput) (Activity, error) {
 	// bind
-	var activity ActivityGroup
+	var activity Activity
 	activity.Email = input.Email
 	activity.Title = input.Title
 	activity.CreatredAt = time.Now()
@@ -43,14 +43,14 @@ func (s *activityService) CreateActivity(input ActivityCreateInput) (ActivityGro
 	return newActivity, nil
 }
 
-func (s *activityService) GetAllActivity() []ActivityGroup {
+func (s *activityService) GetAllActivity() []Activity {
 	return s.activityRepo.FindAll()
 }
 
-func (s *activityService) GetActivityByID(id int) (ActivityGroup, error) {
+func (s *activityService) GetActivityByID(id int) (Activity, error) {
 	// validation
 	if err := utils.ValidateID(id); err != nil {
-		return ActivityGroup{}, err
+		return Activity{}, err
 	}
 
 	// call service
@@ -88,9 +88,9 @@ func (s *activityService) DeleteByID(id int) error {
 	return s.activityRepo.DeleteByID(id)
 }
 
-func (s *activityService) UpdateByID(input ActivityUpdateInput, id int) (ActivityGroup, error) {
+func (s *activityService) UpdateByID(input ActivityUpdateInput, id int) (Activity, error) {
 	if err := utils.ValidateID(id); err != nil {
-		return ActivityGroup{}, err
+		return Activity{}, err
 	}
 
 	// find activity by id
