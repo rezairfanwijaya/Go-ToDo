@@ -176,7 +176,7 @@ func (h *todoHandler) GetAllTodo(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func (h *todoHandler) DeleteById(c *gin.Context) {
+func (h *todoHandler) DeleteTodoById(c *gin.Context) {
 	// get id from param
 	idParam := c.Param("id")
 
@@ -210,6 +210,65 @@ func (h *todoHandler) DeleteById(c *gin.Context) {
 	response := utils.ResponseAPI(
 		"Success",
 		todo.TodoAfterDelete{},
+		"Success",
+		false,
+	)
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *todoHandler) UpdateTodoByID(c *gin.Context) {
+	// get id from param
+	idParam := c.Param("id")
+
+	// convert to int
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			"id must be int",
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// bind
+	var input todo.TodoUpdateInput
+
+	if err := c.BindJSON(&input); err != nil {
+		myErr := utils.ErrorBinding(err)
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			myErr,
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	// call service
+	todoUpdated, err := h.serviceTodo.UpdateByID(input, id)
+	if err != nil {
+		response := utils.ResponseAPI(
+			http.StatusText(http.StatusBadRequest),
+			nil,
+			err.Error(),
+			true,
+		)
+
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	todoFormatted := todo.FormatterTodo(todoUpdated)
+	response := utils.ResponseAPI(
+		"Success",
+		todoFormatted,
 		"Success",
 		false,
 	)
