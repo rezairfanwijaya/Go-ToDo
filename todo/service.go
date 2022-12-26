@@ -87,7 +87,12 @@ func (s *todoService) GetAllTodo(id int, isHaveQuery bool) ([]Todo, error) {
 			return todos, err
 		}
 
-		return []Todo{}, nil
+		if len(todos) == 0 {
+			return []Todo{}, nil
+		}
+
+		return todos, nil
+
 	}
 
 	// call repo

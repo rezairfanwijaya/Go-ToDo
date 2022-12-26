@@ -73,7 +73,7 @@ func (h *todoHandler) CreateTodo(c *gin.Context) {
 		return
 	}
 
-	todoFormatted := todo.FormatterTodo(newTodo)
+	todoFormatted := todo.FormatterCreateTodo(newTodo)
 
 	response := utils.ResponseAPI(
 		"Success",
@@ -117,7 +117,7 @@ func (h *todoHandler) GetTodoByID(c *gin.Context) {
 		return
 	}
 
-	todoFormatted := todo.FormatterTodo(todoByID)
+	todoFormatted := todo.FormatterGetTodo(todoByID)
 
 	response := utils.ResponseAPI(
 		"Success",
@@ -295,7 +295,7 @@ func (h *todoHandler) UpdateTodoByID(c *gin.Context) {
 		return
 	}
 
-	todoFormatted := todo.FormatterTodo(todoUpdated)
+	todoFormatted := todo.FormatterGetTodo(todoUpdated)
 	response := utils.ResponseAPI(
 		"Success",
 		todoFormatted,
